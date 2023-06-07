@@ -21,6 +21,18 @@
       <groupId>jakarta.servlet</groupId>
       <artifactId>jakarta.servlet-api</artifactId>
       <version>6.0.0</version>
+      <scope>provided</scope>
+      <!--   provided scope говорит о том, что эта зависимость будет предоставлена чем-то.
+          В данном случает Tomcat должен предоставить зависимость    -->
+    </dependency>
+
+    <dependency>
+      <groupId>org.postgresql</groupId>
+      <artifactId>postgresql</artifactId>
+      <version>42.5.4</version>
+      <scope>runtime</scope>
+      <!--   runtime scope говорит о том, что эта зависимость будет использоваться только во время
+          выполнения приложения, т.к. во время компиляции данная зависимость не нужна-->
     </dependency>
 
     <dependency>
@@ -28,7 +40,13 @@
       <artifactId>junit</artifactId>
       <version>4.13.2</version>
       <scope>test</scope>
+      <!--   provided scope говорит о том, что эта зависимость будет использоваться только во время
+      прогонки тестов-->
     </dependency>
+    <!--   compile scope является scope по умолчанию(если scope не указан, то будет использован scope compile)
+        и говорит о том, что данная зависимость будет доступна во время компиляции-->
+    <!--   system scope говорит о том, что эта зависимость находится на локальной машине и этот
+        scope лучше не использовать-->
   </dependencies>
 
   <build>
