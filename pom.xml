@@ -96,8 +96,30 @@
                 </plugin>
                 <!-- default lifecycle, jar packaging: see https://maven.apache.org/ref/current/maven-core/default-bindings.html#Plugin_bindings_for_jar_packaging -->
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
-                    <version>3.0.2</version>
+                    <version>3.3.0</version>
+
+
+                    <executions>
+                        <execution>
+                            <id>Copy docker-compose.yml to target</id>
+                            <phase>validate</phase>
+                            <goals>
+                                <goal>copy-resources</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>${project.basedir}/target</outputDirectory>
+                                <resources>
+                                    <resource>
+                                        <directory>${project.basedir}/docker</directory>
+                                    </resource>
+                                </resources>
+                            </configuration>
+                        </execution>
+                    </executions>
+                    <!--    Вызываем goal copy-resources из maven-resources-plugin в фазе validate  -->
+
                 </plugin>
 
 
