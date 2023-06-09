@@ -9,73 +9,6 @@
         <module>web</module>
     </modules>
 
-    <dependencies>
-        <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.0.0</version>
-            <scope>provided</scope>
-            <!--   provided scope говорит о том, что эта зависимость будет предоставлена чем-то.
-                В данном случает Tomcat должен предоставить зависимость    -->
-        </dependency>
-
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.5.4</version>
-            <scope>runtime</scope>
-            <!--   runtime scope говорит о том, что эта зависимость будет использоваться только во время
-                выполнения приложения, т.к. во время компиляции данная зависимость не нужна-->
-            <optional>true</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.13.2</version>
-            <scope>test</scope>
-            <!--   provided scope говорит о том, что эта зависимость будет использоваться только во время
-            прогонки тестов-->
-        </dependency>
-        <!--   compile scope является scope по умолчанию(если scope не указан, то будет использован scope compile)
-            и говорит о том, что данная зависимость будет доступна во время компиляции-->
-        <!--   system scope говорит о том, что эта зависимость находится на локальной машине и этот
-            scope лучше не использовать-->
-
-
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-webmvc</artifactId>
-            <version>5.3.20</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework</groupId>
-                    <artifactId>spring-beans</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring-aop</artifactId>
-            <version>6.0.6</version>
-        </dependency>
-        <!--  У двух зависимостей выше есть общие транзитивные зависимости. И по умолчанию
-          maven будет использовать версию из той зависимости, которая находится выше.
-          Чтобы переопределить такое поведение, необходимо прописать тег exclusion в верхней зависимости
-          и исключить оттуда эту транзитивную зависимость-->
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>8.0.33</version>
-            <scope>runtime</scope>
-            <optional>true</optional>
-            <!--    В другом проекте, который будет подтягивать данный проект как зависимость нужно будет
-            определиться с тем какую из транзитивных зависимостей использовать: mysql-connector-java или postgresql-->
-        </dependency>
-
-
-    </dependencies>
     <groupId>com.grayroom</groupId>
     <artifactId>maven-example</artifactId>
     <version>1.0.0</version>
@@ -85,59 +18,126 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>jakarta.servlet</groupId>
+                <artifactId>jakarta.servlet-api</artifactId>
+                <version>6.0.0</version>
+                <scope>provided</scope>
+                <!--   provided scope говорит о том, что эта зависимость будет предоставлена чем-то.
+                    В данном случает Tomcat должен предоставить зависимость    -->
+            </dependency>
+
+            <dependency>
+                <groupId>org.postgresql</groupId>
+                <artifactId>postgresql</artifactId>
+                <version>42.5.4</version>
+                <scope>runtime</scope>
+                <!--   runtime scope говорит о том, что эта зависимость будет использоваться только во время
+                    выполнения приложения, т.к. во время компиляции данная зависимость не нужна-->
+                <optional>true</optional>
+            </dependency>
+
+            <dependency>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>4.13.2</version>
+                <scope>test</scope>
+                <!--   provided scope говорит о том, что эта зависимость будет использоваться только во время
+                прогонки тестов-->
+            </dependency>
+            <!--   compile scope является scope по умолчанию(если scope не указан, то будет использован scope compile)
+                и говорит о том, что данная зависимость будет доступна во время компиляции-->
+            <!--   system scope говорит о том, что эта зависимость находится на локальной машине и этот
+                scope лучше не использовать-->
+
+
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-webmvc</artifactId>
+                <version>5.3.20</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-beans</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-aop</artifactId>
+                <version>6.0.6</version>
+            </dependency>
+            <!--  У двух зависимостей выше есть общие транзитивные зависимости. И по умолчанию
+              maven будет использовать версию из той зависимости, которая находится выше.
+              Чтобы переопределить такое поведение, необходимо прописать тег exclusion в верхней зависимости
+              и исключить оттуда эту транзитивную зависимость-->
+
+            <dependency>
+                <groupId>mysql</groupId>
+                <artifactId>mysql-connector-java</artifactId>
+                <version>8.0.33</version>
+                <scope>runtime</scope>
+                <optional>true</optional>
+                <!--    В другом проекте, который будет подтягивать данный проект как зависимость нужно будет
+                определиться с тем какую из транзитивных зависимостей использовать: mysql-connector-java или postgresql-->
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <build>
-        <finalName>MavenWebApp</finalName>
-        <!--    Устанавливаем имя для итогового war файла   -->
-
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.10</version>
-
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>generate-jacoco-report</id>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <phase>prepare-package</phase>
-                    </execution>
-                </executions>
-            </plugin>
-            <!--Добавляем Jacoco плагин для того, чтобы формировать отчеты по тестам-->
-
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>3.1.2</version>
-
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>integration-test</goal>
-                            <goal>verify</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-        <!--    Добавляем плагин, который запускает интеграционные тесты
-        голы integration-test и verify автоматически будут привязаны к соответствующим фазам    -->
+<!--        <finalName>MavenWebApp</finalName>-->
+<!--        &lt;!&ndash;    Устанавливаем имя для итогового war файла   &ndash;&gt;-->
 
         <pluginManagement>
             <plugins>
                 <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>0.8.10</version>
+
+                    <executions>
+                        <execution>
+                            <id>prepare-agent</id>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>generate-jacoco-report</id>
+                            <goals>
+                                <goal>report</goal>
+                            </goals>
+                            <phase>prepare-package</phase>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--Добавляем Jacoco плагин для того, чтобы формировать отчеты по тестам-->
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-failsafe-plugin</artifactId>
+                    <version>3.1.2</version>
+
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>integration-test</goal>
+                                <goal>verify</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <!--    Добавляем плагин, который запускает интеграционные тесты
+                голы integration-test и verify автоматически будут привязаны к соответствующим фазам    -->
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>3.2.0</version>
                 </plugin>
@@ -146,7 +146,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.3.1</version>
-
 
                     <executions>
                         <execution>
@@ -168,7 +167,6 @@
                     <!--    Вызываем goal copy-resources из maven-resources-plugin в фазе validate  -->
                 </plugin>
 
-
                 <plugin>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.11.0</version>
@@ -185,6 +183,7 @@
 
 
                 <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>3.1.2</version>
                 </plugin>
