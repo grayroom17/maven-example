@@ -73,7 +73,7 @@
     </dependencies>
     <groupId>com.grayroom</groupId>
     <artifactId>maven-example</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
 
     <name>maven-example</name>
@@ -189,4 +189,24 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <distributionManagement>
+        <snapshotRepository>
+            <id>local-nexus</id>
+            <url>http://localhost:9000/repository/maven-snapshots/</url>
+        </snapshotRepository>
+        <repository>
+            <id>local-nexus</id>
+            <url>http://localhost:9000/repository/maven-releases/</url>
+        </repository>
+    </distributionManagement>
+
+    <!--Тут настраиваем куда при деплое будут заливаться релизные и снэпшот версии.
+    Чтобы проверить этот функционал, необходимо сперва развернуть контейнер с nuxus.
+    Для этого в терминале вызвать команду:
+    docker run -d -p 9000:8081 &#45;&#45;name nexus sonatype/nexus3
+    Далее нужно зайти на nexus: localhost:9000; и поменять пароль.
+    После этого файл settings.xml нужно скопировать в директорию home/{user}/.m2/
+    Вызвать фазу deploy-->
+
 </project>
