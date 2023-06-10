@@ -20,6 +20,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
+        <app.env>local-var</app.env>
     </properties>
 
     <dependencyManagement>
@@ -91,8 +92,34 @@
     </dependencyManagement>
 
     <build>
-<!--        <finalName>MavenWebApp</finalName>-->
-<!--        &lt;!&ndash;    Устанавливаем имя для итогового war файла   &ndash;&gt;-->
+        <!--        <finalName>MavenWebApp</finalName>-->
+        <!--        &lt;!&ndash;    Устанавливаем имя для итогового war файла   &ndash;&gt;-->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+
+                <executions>
+                    <execution>
+                        <id>Copy docker-compose.yml to target</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/docker</directory>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+                <!--    Вызываем goal copy-resources из maven-resources-plugin в фазе validate  -->
+            </plugin>
+        </plugins>
 
         <pluginManagement>
             <plugins>
@@ -146,25 +173,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>3.3.1</version>
-
-                    <executions>
-                        <execution>
-                            <id>Copy docker-compose.yml to target</id>
-                            <phase>validate</phase>
-                            <goals>
-                                <goal>copy-resources</goal>
-                            </goals>
-                            <configuration>
-                                <outputDirectory>${project.basedir}/target</outputDirectory>
-                                <resources>
-                                    <resource>
-                                        <directory>${project.basedir}/docker</directory>
-                                    </resource>
-                                </resources>
-                            </configuration>
-                        </execution>
-                    </executions>
-                    <!--    Вызываем goal copy-resources из maven-resources-plugin в фазе validate  -->
                 </plugin>
 
                 <plugin>
@@ -215,7 +223,58 @@
                 </plugin>
             </plugins>
         </pluginManagement>
+
+        <resources>
+            <resource>
+                <directory>${project.basedir}/src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
+
+    <profiles>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <app.env>prod-var</app.env>
+                <example>test-test</example>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>3.11.0</version>
+                        <configuration>
+                            <debug>false</debug>
+                            <optimize>true</optimize>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+            <activation>
+                <!--<activeByDefault>true</activeByDefault>-->
+                <!--Делаем этом профиль активным по умолчанию-->
+                <os>
+                    <family>linux</family>
+                </os>
+                <!--Делаем этом профиль активным если используется ОС Linux-->
+                <jdk>17</jdk>
+                <!--Делаем этом профиль активным если используется JDK 17-->
+                <file>
+                    <exists>${basedir}/pom.xml</exists>
+                </file>
+                <!--Делаем этом профиль активным если в root директории проекта лежит указанный файл-->
+                <!--Чтобы сделать обратное, вместо exists нужно использовать missing-->
+                <property>
+                    <name>profile.activation</name>
+                    <value>prod</value>
+                </property>
+                <!--Делаем этом профиль активным если системная property установленна в нужное значение-->
+                <!--В данном случае имеется ввиду -Dprofile.activation=prod-->
+            </activation>
+        </profile>
+    </profiles>
 
     <distributionManagement>
         <snapshotRepository>
