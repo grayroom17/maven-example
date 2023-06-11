@@ -11,10 +11,16 @@
 
     <groupId>com.grayroom</groupId>
     <artifactId>maven-example</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>maven-example</name>
+
+    <scm>
+        <connection>scm:git:git@github.com:grayroom17/maven-example.git</connection>
+        <developerConnection>scm:git:git@github.com:grayroom17/maven-example.git</developerConnection>
+        <url>https://github.com/grayroom17/maven-example.git</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -118,6 +124,12 @@
                     </execution>
                 </executions>
                 <!--    Вызываем goal copy-resources из maven-resources-plugin в фазе validate  -->
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>3.0.1</version>
             </plugin>
         </plugins>
 
